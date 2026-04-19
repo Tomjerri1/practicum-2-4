@@ -63,6 +63,6 @@ Nimble.Modulith - це проект, що демонструє побудову 
 - Dimensions: DimDate (2025-2026 роки), DimCustomer, DimProduct.
 - Facts: FactOrders, що зберігає кількісні показники для аналітики.
 
-![System Context Diagram](docs/diagrams/img/System Context.png)
+![System Context Diagram](docs/diagrams/img/SystemContext.png)
 ![Container Diagram](docs/diagrams/img/Container.png)
 ![Component Diagram](docs/diagrams/img/Component.png)
