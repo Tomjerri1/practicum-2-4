@@ -1,7 +1,7 @@
 ﻿using FastEndpoints;
 using Mediator;
 using Ardalis.Result;
-// Заміни на правильні namespace твоїх команд
+
 using Nimble.Modulith.Customers.UseCases.Orders.Commands; 
 
 namespace Nimble.Modulith.Customers.Endpoints.Orders;
@@ -11,7 +11,7 @@ public class CreateOrder(IMediator mediator) : Endpoint<CreateOrderCommand, obje
     public override void Configure()
     {
         Post("/orders");
-        AllowAnonymous(); // Або налаштуй доступ
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CreateOrderCommand req, CancellationToken ct)
