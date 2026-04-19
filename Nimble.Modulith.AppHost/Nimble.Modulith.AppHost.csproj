@@ -1,0 +1,15 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.2.2">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nimble.Modulith.ServiceDefaults\Nimble.Modulith.ServiceDefaults.csproj" IsAspireProjectResource="false" />
+    <ProjectReference Include="..\Nimble.Modulith.Web\Nimble.Modulith.Web.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>9f989da7-f60a-484e-9d2f-b8a0e402c816</UserSecretsId>
+  </PropertyGroup>
+
+</Project>
