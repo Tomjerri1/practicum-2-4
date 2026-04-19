@@ -1,6 +1,8 @@
 ﻿using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 
 namespace Nimble.Modulith.Users.Endpoints;
 
@@ -10,13 +12,20 @@ public class LoginRequest
     public string Password { get; set; } = string.Empty;
 }
 
-public class LoginEndpoint : Endpoint<LoginRequest>
+public class LoginResponse
+{
+    public string Token { get; set; } = string.Empty;
+}
+
+public class Login : Endpoint<LoginRequest, LoginResponse>
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IConfiguration _config;
 
-    public LoginEndpoint(UserManager<ApplicationUser> userManager)
+    public Login(UserManager<ApplicationUser> userManager, IConfiguration config)
     {
         _userManager = userManager;
+        _config = config;
     }
 
     public override void Configure()
@@ -28,21 +37,32 @@ public class LoginEndpoint : Endpoint<LoginRequest>
     public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
     {
         var user = await _userManager.FindByEmailAsync(req.Email);
-        
+
         if (user == null || !await _userManager.CheckPasswordAsync(user, req.Password))
         {
-            ThrowError("Invalid credentials");
+            await Send.UnauthorizedAsync(ct);
+            return;
         }
 
-        var jwtSecret = Config["Auth:JwtSecret"]!;
-        var token = JwtBearer.CreateToken(
-            o =>
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var jwtToken = JwtBearer.CreateToken(
+            opts =>
             {
-                o.SigningKey = jwtSecret;
-                o.ExpireAt = DateTime.UtcNow.AddDays(1);
-                o.User.Claims.Add(("Email", req.Email));
+                opts.SigningKey = _config["Auth:JwtSecret"]!;
+                opts.ExpireAt = DateTime.UtcNow.AddDays(1);
+                
+                opts.User.Claims.Add(("Email", user.Email!));
+                
+                foreach (var role in roles)
+                {
+                    opts.User.Roles.Add(role);
+                }
             });
 
-        await Send.OkAsync(new { Token = token }, ct);
+        Response = new LoginResponse
+        {
+            Token = jwtToken
+        };
     }
 }

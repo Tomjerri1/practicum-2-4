@@ -3,6 +3,8 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Nimble.Modulith.Users;
+using Nimble.Modulith.Users.Data;
+using Nimble.Modulith.Email;
 using Serilog;
 
 var logger = Log.Logger = new LoggerConfiguration()
@@ -27,6 +29,8 @@ builder.Services.AddFastEndpoints()
 
 builder.Services.AddUsersModule(builder.Configuration);
 builder.AddProductsModuleServices(logger);
+builder.AddEmailModuleServices(logger);
+builder.Services.AddMediator();
 
 var app = builder.Build();
 

@@ -29,6 +29,7 @@ public class Create(ProductsDbContext dbContext, IUserService userService) : End
     {
         Post("/products");
         Tags("products");
+        Roles("Admin");
         Summary(s =>
         {
             s.Summary = "Create a new product";

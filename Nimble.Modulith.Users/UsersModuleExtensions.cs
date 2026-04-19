@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Nimble.Modulith.Users.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Nimble.Modulith.Users;
 
@@ -22,6 +24,7 @@ public static class UsersModuleExtensions
             }));
 
         services.AddIdentityCore<ApplicationUser>()
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<UsersDbContext>();
         
         services.AddScoped<Nimble.Modulith.Users.Contracts.IUserService, Nimble.Modulith.Users.Services.UserService>();

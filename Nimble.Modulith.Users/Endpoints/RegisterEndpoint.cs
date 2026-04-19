@@ -9,11 +9,17 @@ public class RegisterRequest
     public string Password { get; set; } = string.Empty;
 }
 
-public class RegisterEndpoint : Endpoint<RegisterRequest>
+public class RegisterResponse
+{
+    public string Message { get; set; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
+}
+
+public class Register : Endpoint<RegisterRequest, RegisterResponse>
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public RegisterEndpoint(UserManager<ApplicationUser> userManager)
+    public Register(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -26,18 +32,28 @@ public class RegisterEndpoint : Endpoint<RegisterRequest>
 
     public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
     {
-        var user = new ApplicationUser { UserName = req.Email, Email = req.Email };
+        var user = new ApplicationUser
+        {
+            UserName = req.Email,
+            Email = req.Email
+        };
+
         var result = await _userManager.CreateAsync(user, req.Password);
 
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
+            {
                 AddError(error.Description);
-            
-            ThrowIfAnyErrors();
+            }
+            await Send.ErrorsAsync(cancellation: ct);
             return;
         }
 
-        await Send.OkAsync(new { Message = "User registered successfully" }, ct);
+        Response = new RegisterResponse
+        {
+            Message = "User registered successfully",
+            Id = user.Id
+        };
     }
 }
