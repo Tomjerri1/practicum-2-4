@@ -1,0 +1,13 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Користувач (Customer/Admin)", "Людина, яка купує товари або керує каталогом через API.")
+System(nimble, "Nimble.Modulith System", "Модульний моноліт для керування замовленнями, продуктами та звітами.")
+System_Ext(mail, "Email Service (Papercut)", "Зовнішня система для прийому та перегляду транзакційних листів.")
+
+Rel(user, nimble, "Використовує", "HTTP/JSON")
+Rel(nimble, mail, "Відправляє листи", "SMTP")
+Rel(user, mail, "Переглядає листи", "Web UI")
+@enduml

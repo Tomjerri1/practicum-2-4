@@ -1,0 +1,17 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Component(event_handler, "OrderCreatedEventHandler", "Mediator NotificationHandler", "Слухає події замовлень та оновлює зіркову схему.")
+Component(report_service, "ReportService", "Dapper Service", "Виконує швидкі SQL-запити до таблиць фактів.")
+Component(db_context, "ReportingDbContext", "EF Core", "Керує схемою бази даних та вимірами.")
+Component(endpoints, "Reporting Endpoints", "FastEndpoints", "Надає API для отримання звітів у JSON/CSV.")
+
+ContainerDb(db_reporting, "ReportingDb", "SQL Server", "FactOrders, DimDate, DimCustomer, DimProduct")
+
+Rel(endpoints, report_service, "Використовує")
+Rel(report_service, db_reporting, "Запити (SQL)", "Dapper")
+Rel(event_handler, db_context, "Запис даних")
+Rel(db_context, db_reporting, "Мапінг")
+@enduml

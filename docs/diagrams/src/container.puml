@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container(api, "Web API (FastEndpoints)", ".NET 10, C#", "Обробляє запити, реалізує бізнес-логіку модулів.")
+
+System_Boundary(db_boundary, "Бази даних (SQL Server)") {
+    ContainerDb(db_users, "UsersDb", "SQL Server", "Дані користувачів та Identity.")
+    ContainerDb(db_products, "ProductsDb", "SQL Server", "Каталог товарів та ціни.")
+    ContainerDb(db_customers, "CustomersDb", "SQL Server", "Клієнти та історія замовлень.")
+    ContainerDb(db_reporting, "ReportingDb", "SQL Server", "Аналітична зіркова схема (Star Schema).")
+}
+
+Container(papercut, "Papercut Container", "Docker", "SMTP-сервер для розробки.")
+
+Rel(api, db_users, "Читання/Запис", "EF Core")
+Rel(api, db_products, "Читання/Запис", "EF Core")
+Rel(api, db_customers, "Читання/Запис", "EF Core")
+Rel(api, db_reporting, "Читання/Запис", "EF Core / Dapper")
+Rel(api, papercut, "Відправка", "SMTP")
+@enduml
