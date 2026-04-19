@@ -1,23 +1,26 @@
-using Nimble.Modulith.Products;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
+using Mediator;
+using Nimble.Modulith.Customers;
+using Nimble.Modulith.Email;
+using Nimble.Modulith.Products;
 using Nimble.Modulith.Users;
 using Nimble.Modulith.Users.Data;
-using Nimble.Modulith.Email;
 using Serilog;
 
-var logger = Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
+var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-logger.Information("Starting web host");
+builder.Host.UseSerilog();
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
-
-builder.AddServiceDefaults();
+builder.AddProductsModuleServices(Log.Logger);
+builder.Services.AddCustomersModuleServices(builder.Configuration);
+builder.Services.AddUsersModule(builder.Configuration);
+builder.AddEmailModuleServices(Log.Logger);
 
 builder.Services.AddFastEndpoints()
     .AddAuthenticationJwtBearer(s =>
@@ -27,26 +30,29 @@ builder.Services.AddFastEndpoints()
     .AddAuthorization()
     .SwaggerDocument();
 
-builder.Services.AddUsersModule(builder.Configuration);
-builder.AddProductsModuleServices(logger);
-builder.AddEmailModuleServices(logger);
-builder.Services.AddMediator();
+builder.Services.AddMediator(options =>
+{
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+});
+
+builder.AddServiceDefaults();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+app.MapDefaultEndpoints();
+
+if (app.Environment.IsDevelopment())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-    dbContext.Database.EnsureCreated();
+    app.UseSwaggerGen();
 }
+
+await app.EnsureUsersModuleDatabaseAsync();
 await app.EnsureProductsModuleDatabaseAsync();
+await app.EnsureCustomersModuleDatabaseAsync();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseFastEndpoints()
-    .UseSwaggerGen();
-
-app.MapDefaultEndpoints();
+app.UseFastEndpoints();
 
 app.Run();

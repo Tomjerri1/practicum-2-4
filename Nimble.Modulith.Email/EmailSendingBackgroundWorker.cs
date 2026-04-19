@@ -27,7 +27,6 @@ public class EmailSendingBackgroundWorker : BackgroundService
         {
             try
             {
-                bool processedAny = false;
         
                 while (true)
                 {
@@ -45,8 +44,7 @@ public class EmailSendingBackgroundWorker : BackgroundService
                             emailToSend.From);
 
                         await _emailSender.SendEmailAsync(message, stoppingToken);
-            
-                        processedAny = true;
+                        
                     }
                     catch (OperationCanceledException)
                     {

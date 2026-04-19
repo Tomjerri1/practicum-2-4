@@ -10,13 +10,16 @@
     <PackageReference Include="FastEndpoints" Version="8.1.0" />
     <PackageReference Include="FastEndpoints.Security" Version="8.1.0" />
     <PackageReference Include="FastEndpoints.Swagger" Version="8.1.0" />
-    <PackageReference Include="Mediator" Version="1.0.2123" />
     <PackageReference Include="Mediator.Abstractions" Version="3.0.2" />
     <PackageReference Include="Mediator.SourceGenerator" Version="3.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
   </ItemGroup>
 
@@ -25,6 +28,7 @@
     <ProjectReference Include="..\Nimble.Modulith.ServiceDefaults\Nimble.Modulith.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Nimble.Modulith.Products\Nimble.Modulith.Products.csproj" />
     <ProjectReference Include="..\Nimble.Modulith.Email\Nimble.Modulith.Email.csproj" />
+    <ProjectReference Include="..\Nimble.Modulith.Customers\Nimble.Modulith.Customers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -20,4 +20,6 @@
     <Project Path="Nimble.Modulith.ServiceDefaults/Nimble.Modulith.ServiceDefaults.csproj" />
     <Project Path="Nimble.Modulith.Web/Nimble.Modulith.Web.csproj" />
   </Folder>
+  <Project Path="Nimble.Modulith.Customers.Contracts/Nimble.Modulith.Customers.Contracts.csproj" />
+  <Project Path="Nimble.Modulith.Customers/Nimble.Modulith.Customers.csproj" />
 </Solution>
