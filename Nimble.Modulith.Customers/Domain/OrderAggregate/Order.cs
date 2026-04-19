@@ -14,15 +14,21 @@ public class Order
 
     public void AddItem(OrderItem item)
     {
+        if (Status != OrderStatus.Pending)
+        {
+            throw new InvalidOperationException($"Cannot add items to order in {Status} status");
+        }
+        
         Items.Add(item);
     }
 }
 
 public enum OrderStatus
 {
-    Pending,
-    Processing,
-    Shipped,
-    Completed,
-    Cancelled
+    Pending = 0,
+    Confirmed = 1,
+    Processing = 2,
+    Shipped = 3,
+    Delivered = 4,
+    Cancelled = 5
 }

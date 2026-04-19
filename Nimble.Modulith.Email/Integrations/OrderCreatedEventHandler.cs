@@ -1,9 +1,10 @@
 ﻿using Mediator;
 using Nimble.Modulith.Customers.Contracts;
+using Nimble.Modulith.Email.Interfaces;
 
 namespace Nimble.Modulith.Email.Integrations;
 
-public class OrderCreatedEventHandler(IEmailSender emailSender) : INotificationHandler<OrderCreatedEvent>
+public class OrderCreatedEventHandler(IQueueService<EmailToSend> queueService) : INotificationHandler<OrderCreatedEvent>
 {
     public async ValueTask Handle(OrderCreatedEvent notification, CancellationToken ct)
     {
@@ -20,12 +21,11 @@ Total Amount: {notification.TotalAmount}
 Items:
 {itemsList}";
 
-
-        var message = new EmailMessage(
+        var emailToSend = new EmailToSend(
             notification.CustomerEmail, 
             $"Order Confirmation - {notification.OrderNumber}", 
             body);
 
-        await emailSender.SendEmailAsync(message);
+        await queueService.EnqueueAsync(emailToSend, ct);
     }
 }

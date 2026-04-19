@@ -22,4 +22,5 @@
   </Folder>
   <Project Path="Nimble.Modulith.Customers.Contracts/Nimble.Modulith.Customers.Contracts.csproj" />
   <Project Path="Nimble.Modulith.Customers/Nimble.Modulith.Customers.csproj" />
+  <Project Path="Nimble.Modulith.Reporting/Nimble.Modulith.Reporting.csproj" />
 </Solution>

@@ -4,7 +4,6 @@ using Nimble.Modulith.Customers.Contracts;
 using Nimble.Modulith.Customers.Domain.CustomerAggregate;
 using Nimble.Modulith.Customers.Domain.Interfaces;
 using Nimble.Modulith.Customers.UseCases.Orders.Commands;
-using Nimble.Modulith.Email.Contracts;
 
 namespace Nimble.Modulith.Customers.Endpoints.Orders;
 
@@ -30,10 +29,24 @@ public class Confirm(IMediator mediator, IReadRepository<Customer> customerRepo)
 
         var customer = await customerRepo.GetByIdAsync(result.Value.CustomerId, ct);
         
-        var emailBody = $"Dear Customer,\n\nYour order {result.Value.OrderNumber} has been confirmed!\nTotal: ${result.Value.TotalAmount}";
-        var emailCommand = new SendEmailCommand(customer!.Email, $"Order Confirmation - {result.Value.OrderNumber}", emailBody);
-        
-        await mediator.Send(emailCommand, ct);
+        var orderCreatedEvent = new OrderCreatedEvent(
+            result.Value.Id,
+            result.Value.CustomerId,
+            customer!.Email,
+            result.Value.OrderNumber,
+            result.Value.OrderDate,
+            result.Value.TotalAmount,
+            result.Value.Items.Select(i => new OrderItemDetails(
+                i.Id,
+                i.ProductId,
+                i.ProductName,
+                i.Quantity,
+                i.UnitPrice,
+                i.TotalPrice
+            )).ToList()
+        );
+
+        await mediator.Publish(orderCreatedEvent, ct);
         
         Response = result.Value;
     }

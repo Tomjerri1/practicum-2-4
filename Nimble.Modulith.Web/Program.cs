@@ -8,6 +8,7 @@ using Nimble.Modulith.Products;
 using Nimble.Modulith.Users;
 using Nimble.Modulith.Users.Data;
 using Serilog;
+using Nimble.Modulith.Reporting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Host.UseSerilog();
 
 builder.AddProductsModuleServices(Log.Logger);
 builder.Services.AddCustomersModuleServices(builder.Configuration);
+builder.AddReportingModuleServices(builder.Configuration);
 builder.Services.AddUsersModule(builder.Configuration);
 builder.AddEmailModuleServices(Log.Logger);
 
@@ -49,6 +51,7 @@ if (app.Environment.IsDevelopment())
 await app.EnsureUsersModuleDatabaseAsync();
 await app.EnsureProductsModuleDatabaseAsync();
 await app.EnsureCustomersModuleDatabaseAsync();
+await app.EnsureReportingModuleDatabaseAsync();
 
 app.UseAuthentication();
 app.UseAuthorization();

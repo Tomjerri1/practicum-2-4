@@ -40,7 +40,7 @@ public class SmtpEmailSender : IEmailSender
             }
 
             await client.SendAsync(mimeMessage, cancellationToken);
-            await client.DisconnectAsync(true, cancellationToken);
+            await client.DisconnectAsync(false, cancellationToken);
 
             _logger.LogInformation(
                 "Email sent successfully to {To} with subject: {Subject}",

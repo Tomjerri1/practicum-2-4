@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nimble.Modulith.Customers.Domain.Interfaces;
+using Nimble.Modulith.Customers.Domain.OrderAggregate;
 
 namespace Nimble.Modulith.Customers.Data;
 
@@ -7,6 +8,13 @@ public class EfRepository<T>(CustomersDbContext dbContext) : IRepository<T> wher
 {
     public async Task<T?> GetByIdAsync<TId>(TId id, CancellationToken ct) where TId : notnull
     {
+        if (typeof(T) == typeof(Order) && id is int orderId)
+        {
+            return await dbContext.Set<Order>()
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == orderId, ct) as T;
+        }
+        
         return await dbContext.Set<T>().FindAsync([id], ct);
     }
 
