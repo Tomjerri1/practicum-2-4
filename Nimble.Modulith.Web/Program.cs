@@ -1,3 +1,4 @@
+using Nimble.Modulith.Products;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
@@ -25,6 +26,7 @@ builder.Services.AddFastEndpoints()
     .SwaggerDocument();
 
 builder.Services.AddUsersModule(builder.Configuration);
+builder.AddProductsModuleServices(logger);
 
 var app = builder.Build();
 
@@ -33,6 +35,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
     dbContext.Database.EnsureCreated();
 }
+await app.EnsureProductsModuleDatabaseAsync();
 
 app.UseAuthentication();
 app.UseAuthorization();
