@@ -23,6 +23,8 @@ public static class UsersModuleExtensions
 
         services.AddIdentityCore<ApplicationUser>()
             .AddEntityFrameworkStores<UsersDbContext>();
+        
+        services.AddScoped<Nimble.Modulith.Users.Contracts.IUserService, Nimble.Modulith.Users.Services.UserService>();
 
         return services;
     }
