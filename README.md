@@ -28,13 +28,13 @@ Nimble.Modulith - це проект, що демонструє побудову 
 - Docker Desktop
 
 ### Запуск проекту
-1. Склонуйте репозиторій, командою:
+1. Склонуйте репозиторій:
 - git clone https://github.com/Tomjerri1/practicum-2-4.git
-2. Перейдіть у корінь проекту, командою:
+2. Перейдіть у корінь проекту:
 - cd practicum-2-4
-3. Виконайте збірку, командою:
+3. Виконайте збірку:
 - dotnet build
-4. Запустіть проект через Aspire AppHost, командою: 
+4. Запустіть проект через Aspire AppHost: 
 - dotnet run --project Nimble.Modulith.AppHost/Nimble.Modulith.AppHost.csproj
 5. Відкрийте Aspire Dashboard (посилання з'явиться в консолі), де ви знайдете посилання на:
 - webfrontend: Swagger UI для тестування API.
