@@ -52,17 +52,6 @@ Nimble.Modulith - це проект, що демонструє побудову 
 - Outbox Pattern (спрощений): Листи не відправляються миттєво, а стають у чергу ChannelQueueService, яку обробляє фоновий воркер, що запобігає затримкам API при проблемах з поштовим сервером.
 - Reporting Separation: Модуль звітів не робить запити до основних баз. Він будує власну базу фактів та вимірів на основі подій, що дозволяє будувати складні звіти без впливу на продуктивність системи замовлень.
 
-### Структура рішень
-1. У модульному моноліті зроблено розділення на Implementation та Contracts(інтерфейси/події).
-- Module.Contracts: містить лише DTO, команди, події та інтерфейси. Це те, що інші модулі можуть бачити.
-- Module: містить логіку, БД та ендпоінти. Це закрита частина модуля.
-2. Моніторинг та спостережливість
-- OpenTelemetry: збір логів, трасувань та метрик інтегрований через ServiceDefaults.
-- Aspire Dashboard: дозволяє в реальному часі бачити стан усіх баз даних та трафік між модулями.
-3. Деталі схеми модуля reporting
-- Dimensions: DimDate (2025-2026 роки), DimCustomer, DimProduct.
-- Facts: FactOrders, що зберігає кількісні показники для аналітики.
-
 ![System Context Diagram](docs/diagrams/img/SystemContext.png)
 ![Container Diagram](docs/diagrams/img/Container.png)
 ![Component Diagram](docs/diagrams/img/Component.png)
